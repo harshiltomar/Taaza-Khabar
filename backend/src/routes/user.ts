@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { sign, jwt, verify } from "hono/jwt";
 import { z } from "zod";
-import { signupInput } from "../zod";
+import { signupInput, signinInput } from "@harshil_tomar/blog-app";
 
 export const userRouter = new Hono<{
   Bindings: {
@@ -16,10 +16,6 @@ export const userRouter = new Hono<{
 }>();
 
 userRouter.post("/signup", async (c) => {
-  const prisma = new PrismaClient({
-    datasourceUrl: c.env.DATABASE_URL,
-  }).$extends(withAccelerate());
-
   const body = await c.req.json();
   // check for string
 
@@ -30,6 +26,10 @@ userRouter.post("/signup", async (c) => {
       message: "Inputs not correct",
     });
   }
+
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate());
 
   try {
     const user = await prisma.user.create({
@@ -49,24 +49,38 @@ userRouter.post("/signup", async (c) => {
 });
 
 userRouter.post("/signin", async (c) => {
+  const body = await c.req.json();
+  const success = signinInput.safeParse(body);
+
+  if (!success) {
+    c.status(411);
+    return c.json({
+      message: "Inputs not correct",
+    });
+  }
+
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
 
-  const body = await c.req.json();
-  const user = await prisma.user.findFirst({
-    where: {
-      email: body.email,
-      password: body.password,
-    },
-  });
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        email: body.email,
+        password: body.password,
+      },
+    });
 
-  if (!user) {
+    if (!user) {
+      c.status(403);
+      return c.json({ error: "User not found" });
+    }
+
+    //sign the jwt and return it to the user
+    const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
+    return c.json({ jwt });
+  } catch (error) {
     c.status(403);
-    return c.json({ error: "User not found" });
+    return c.json({ error: "Error while signing Up !" });
   }
-
-  //sign the jwt and return it to the user
-  const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
-  return c.json({ jwt });
 });
