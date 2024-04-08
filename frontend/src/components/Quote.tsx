@@ -9,7 +9,7 @@ export const Quote = ({ type }: QouteProps) => {
         <div className="max-w-lg">
           <div className="text-3xl font-bold">
             {type === "signup"
-              ? "The creator of this site is so cool. He used react, Typescript prisma and cloudflare too! You should definitely reach out to him"
+              ? "This site is so cool. Here we have used react, Typescript prisma and cloudflare too! You should definitely signup : )"
               : "Hey Explorer ! Welcome back to Taaza Khabar. Signin and get started onto exploreing amazing blogs by people accross the Globe ! "}
           </div>
           <div className="max-w-md text-xl font-semibold text-left mt-4">
