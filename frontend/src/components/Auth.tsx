@@ -24,6 +24,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
       localStorage.setItem("token", jwt);
       navigate("/blogs");
     } catch (err) {
+      alert("Erorr while signing up");
       //alert the user here that the request failed
     }
   }
@@ -62,12 +63,12 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
               />
             ) : null}
             <LabelledInput
-              label="Username"
-              placeholder="Enter your Username..."
+              label="Email"
+              placeholder="Enter your email id..."
               onChange={(e) => {
                 setPostInputs({
                   ...postInputs,
-                  name: e.target.value,
+                  username: e.target.value,
                 });
               }}
             />
@@ -78,7 +79,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
               onChange={(e) => {
                 setPostInputs({
                   ...postInputs,
-                  name: e.target.value,
+                  password: e.target.value,
                 });
               }}
             />

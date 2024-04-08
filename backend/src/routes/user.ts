@@ -2,8 +2,8 @@ import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { sign, jwt, verify } from "hono/jwt";
-import { z } from "zod";
 import { signupInput, signinInput } from "@harshil_tomar/blog-app";
+import { cors } from "hono/cors";
 
 export const userRouter = new Hono<{
   Bindings: {
@@ -35,8 +35,9 @@ userRouter.post("/signup", async (c) => {
     const user = await prisma.user.create({
       //@ts-ignore
       data: {
-        email: body.email,
+        email: body.username,
         password: body.password,
+        name: body.name,
       },
     });
 
