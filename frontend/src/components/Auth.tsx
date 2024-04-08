@@ -13,6 +13,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     username: "",
     password: "",
   });
+  const [username, setUserName] = useState("");
 
   async function sendRequest() {
     try {
@@ -20,8 +21,10 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
         `${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`,
         postInputs
       );
-      const jwt = response.data;
+      const { jwt } = response.data;
       localStorage.setItem("token", jwt);
+      localStorage.setItem("username", username);
+      setUserName(username);
       navigate("/blogs");
     } catch (err) {
       alert("Erorr while signing up");

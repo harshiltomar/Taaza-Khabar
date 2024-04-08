@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 export const Appbar = () => {
   const [visible, setVisibile] = useState(false);
+  const username = localStorage.getItem("username");
   const navigate = useNavigate();
 
   return (
@@ -12,20 +13,20 @@ export const Appbar = () => {
         to={"/blogs"}
         className="flex flex-col justify-center cursor-pointer"
       >
-        TaazaKhabar
+        TAAZAKhabar
       </Link>
       <div>
         <Link to={`/publish`}>
           <button
             type="button"
-            className="mr-4 text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 "
+            className="mr-4 text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2.5 text-center me-2 mb-2 "
           >
             New
           </button>
         </Link>
 
         <button onClick={() => setVisibile((p) => !p)}>
-          <Avatar size={"big"} name="Sai" />
+          <Avatar size={"big"} name="H" />
         </button>
         {visible && (
           <div className="flex flex-row justify-center w-[200px] absolute right-[2px] top-[82px]">
