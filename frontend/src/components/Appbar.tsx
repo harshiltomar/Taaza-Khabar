@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 export const Appbar = () => {
   const [visible, setVisibile] = useState(false);
-  const username = localStorage.getItem("username");
   const navigate = useNavigate();
 
   return (
